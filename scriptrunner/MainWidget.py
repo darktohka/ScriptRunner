@@ -22,9 +22,18 @@ class MainWidget(ScriptWidget):
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
-        self.setFixedSize(self.sizeHint())
+        self.updateSize()
         self.center()
         self.show()
+    
+    def updateSize(self):
+        hint = self.sizeHint()
+        hint.setWidth(500)
+
+        if hint.height() < 400:
+            hint.setHeight(400)
+
+        self.setFixedSize(hint)
     
     def reloadServers(self):
         self.settingsTab.reloadServers()
@@ -45,7 +54,7 @@ class MainWidget(ScriptWidget):
         tab = ServerTab(self.base, server)
         self.serverTabs[name] = tab
         tab.setIndex(self.tabs.addTab(tab, name))
-        self.setFixedSize(self.sizeHint())
+        self.updateSize()
 
     def removeServerTab(self, name):
         if name not in self.serverTabs:
@@ -54,3 +63,8 @@ class MainWidget(ScriptWidget):
         tab = self.serverTabs[name]
         self.tabs.removeTab(tab.getIndex())
         del self.serverTabs[name]
+        self.updateSize()
+
+    def runCommands(self, server, commands):
+        self.addServerTab(server)
+        self.serverTabs[server['name']].runCommands(commands)

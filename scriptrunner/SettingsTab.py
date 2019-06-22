@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QPushButton, QMessageBox, QLabel
 from .NewServerWidget import NewServerWidget
 from .NewScriptWidget import NewScriptWidget
+from .ChooseServerWidget import ChooseServerWidget
 import copy
 
 class SettingsTab(QWidget):
@@ -12,6 +13,7 @@ class SettingsTab(QWidget):
         self.base = base
 
         self.layout = QHBoxLayout()
+        self.layout.setAlignment(Qt.AlignCenter)
 
         self.serverWidget = QWidget()
         self.serverLayout = QVBoxLayout()
@@ -70,8 +72,7 @@ class SettingsTab(QWidget):
 
         self.newServerWidget = None
         self.newScriptWidget = None
-
-        self.setFixedSize(self.sizeHint())
+        self.chooseServerWidget = None
 
     def reloadServers(self):
         self.serverBox.clear()
@@ -152,4 +153,4 @@ class SettingsTab(QWidget):
         self.newScriptWidget = NewScriptWidget(self.base, None)
     
     def runScript(self, *args):
-        self.base.main.createServerTabs()
+        self.chooseServerWidget = ChooseServerWidget(self.base, self.scriptBox.currentText())
